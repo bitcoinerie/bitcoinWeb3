@@ -32,6 +32,7 @@
         <property name="packagesToScan" value="fr.bitcoinerie.domain"/>
     </bean>
     <bean class="fr.bitcoinerie.service.MyTransactionServiceImpl" />
+    <bean class="fr.bitcoinerie.service.MyEchangeServiceImpl" />
     <bean class="fr.bitcoinerie.service.MyUserServiceImpl" />
 
 

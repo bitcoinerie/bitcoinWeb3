@@ -1,6 +1,7 @@
 package fr.bitcoinerie.web.controller;
 
 import fr.bitcoinerie.domain.MyTransaction;
+import fr.bitcoinerie.domain.MyEchange;
 import fr.bitcoinerie.domain.MyUser;
 import fr.bitcoinerie.service.MyEchangeService;
 import fr.bitcoinerie.service.MyTransactionService;
@@ -62,6 +63,7 @@ public class IndexController {
     }
 
     @RequestMapping("/allTransactions")
+
     public String allTransactions(Model model) {
 
         model.addAttribute("transactions", myTransactionService.findAllTransaction());
@@ -150,8 +152,10 @@ public class IndexController {
             MyTransaction myTransaction = new MyTransaction();
             Arnold = new MyUser("Arnold","Schwarz",120);
             Fabien = new MyUser("Fabien","Bart", 250);
-            myUserService.save(Arnold);
-            myUserService.save(Fabien);
+
+            myEchangeService.saveuserandmajEchange(Arnold);
+
+            myEchangeService.saveuserandmajEchange(Fabien);
 
             myTransaction.setDate_temps(new Date());
 
@@ -176,7 +180,7 @@ public class IndexController {
 
             MyTransaction myTransaction2 = new MyTransaction();
             Henri = new MyUser("Henri","Fayol", 300);
-            Julie = new MyUser("Julie","Poitou",220);
+            Julie = new MyUser("Julie","Poitou",320);
 
             myTransaction2.setDate_temps(new Date());
             myTransaction2.setEmetteur(Henri);
@@ -186,14 +190,15 @@ public class IndexController {
 //            Henri.getListe_depenses().add(myTransaction2);
 //            Julie.getListe_depenses().add(myTransaction2);
 
-            myUserService.save(Henri);
+            myEchangeService.saveuserandmajEchange(Henri);
 
-            myUserService.save(Fabien);
+            myEchangeService.saveuserandmajEchange(Fabien);
 
-            myUserService.save(Julie);
+            myEchangeService.saveuserandmajEchange(Julie);
 
             myTransactionService.saveTransaction(myTransaction2);
             myUserService.doTransaction(myTransaction2);
+            myEchangeService.dotransactionandmajechange(myTransaction2);
 
 
 

@@ -1,5 +1,6 @@
 package fr.bitcoinerie.web.controller;
 
+import fr.bitcoinerie.domain.MyEchange;
 import fr.bitcoinerie.domain.MyTransaction;
 import fr.bitcoinerie.domain.MyUser;
 import fr.bitcoinerie.service.MyTransactionService;
@@ -114,6 +115,7 @@ public class AdminController {
         }
 
         myUserService.save(user);
+
 
         redirectAttributes.addFlashAttribute("user", user);
         redirectAttributes.addFlashAttribute("flashMessage", "User " + user.getLogin() + " created");

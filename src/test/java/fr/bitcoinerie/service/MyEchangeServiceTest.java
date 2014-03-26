@@ -240,10 +240,10 @@ public class MyEchangeServiceTest {
     public void testnouvuser(){
         Jean =  new MyUser("Jean", "Kevin", 100);
         myEchangeService.saveuserandmajEchange(Jean);
-        myEchangeService.nouvuser(dateTest, Jean,100.);
+        myEchangeService.nouvuser( Jean,100.);
         Paul =  new MyUser("Paul", "Hidalgo", 200);
         myEchangeService.saveuserandmajEchange(Paul);
-        myEchangeService.nouvuser(dateTest, Paul,200.);
+        myEchangeService.nouvuser(Paul,200.);
         Long id_jean =Jean.getId_user();
         Long id_paul =Paul.getId_user();
 
@@ -257,33 +257,118 @@ public class MyEchangeServiceTest {
 
         Jean =  new MyUser("Jean", "Kevin", 100);
         Paul =  new MyUser("Paul", "Hidalgo", 200);
-        Assert.assertEquals( (Double)0.,Jean.getReputation());
+        MyUser Alice =  new MyUser("Alice", "Kevin", 150);
+        MyUser Bob =  new MyUser("Bob", "Kevin", 150);
+        MyUser Charles =  new MyUser("Charles", "Kevin", 150);
+        MyUser Daniel =  new MyUser("Daniel", "Kevin", 150);
+        Assert.assertEquals( (Double)1.,Jean.getReputation());
         myEchangeService.saveuserandmajEchange(Jean);
+        System.out.println(Jean.getReputation());
 
-        Assert.assertEquals(1, myUserService.findAll().size());
-
-
-        Assert.assertEquals(1, myEchangeService.findAllEchange().size());
         myEchangeService.saveuserandmajEchange(Paul);
-        Assert.assertEquals(2, myUserService.findAll().size());
+
+        myEchangeService.saveuserandmajEchange(Alice);
+        Double rep=myUserService.findByQuery("Alice").get(0).getReputation();
+        System.out.println(rep);
+
+        myEchangeService.saveuserandmajEchange(Bob);
+         rep=myUserService.findByQuery("Alice").get(0).getReputation();
+        System.out.println(rep);
+
+        myEchangeService.saveuserandmajEchange(Charles);
+        myEchangeService.saveuserandmajEchange(Daniel);
+        rep=myUserService.findByQuery("Alice").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Daniel").get(0).getReputation();
+        System.out.println(rep);
 
 
-        Assert.assertEquals(4, myEchangeService.findAllEchange().size());
         Long id_jean =Jean.getId_user();
         Long id_paul =Paul.getId_user();
-        myEchangeService.majEchange(100., dateTest,id_paul, id_jean) ;
+        Long id_alice= Alice.getId_user();
+        Long id_bob =Bob.getId_user();
+        Long id_charles =Charles.getId_user();
+        Long id_daniel =Daniel.getId_user();
+        myEchangeService.majEchange(60., dateTest,id_paul, id_jean) ;
         myEchangeService.majproba(id_paul, id_jean) ;
+        myEchangeService.majEchange(100., dateTest,id_alice, id_bob) ;
+        myEchangeService.majproba(id_alice, id_bob) ;
+        myEchangeService.majEchange(80., dateTest,id_charles, id_daniel) ;
+        myEchangeService.majproba(id_charles, id_daniel) ;
+        myEchangeService.majEchange(50., dateTest,id_alice, id_charles) ;
+        myEchangeService.majproba(id_alice, id_charles) ;
+        myEchangeService.majEchange(70., dateTest,id_bob, id_jean) ;
+        myEchangeService.majproba(id_bob, id_jean) ;
+        myEchangeService.majEchange(50., dateTest,id_jean, id_charles) ;
+        myEchangeService.majproba(id_jean, id_charles) ;
+        myEchangeService.majEchange(90., dateTest,id_daniel, id_paul) ;
+        myEchangeService.majproba(id_daniel, id_paul) ;
         Double alpha ;
         alpha= 0.15;
         myEchangeService.majreput(alpha) ;
-        Double rep=myUserService.findByQuery("Jean").get(0).getReputation();
-
-        Assert.assertEquals((Double)0.15, rep);
+        rep=myUserService.findByQuery("Alice").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Bob").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Charles").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Daniel").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Jean").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Paul").get(0).getReputation();
+        System.out.println(rep);
+        System.out.println("fin série");
+      //  Assert.assertEquals((Double)0.15, rep);
 
         myEchangeService.majreput(alpha) ;
-        Double rep2=myUserService.findByQuery("Jean").get(0).getReputation();
+        rep=myUserService.findByQuery("Alice").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Bob").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Charles").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Daniel").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Jean").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Paul").get(0).getReputation();
+        System.out.println(rep);
+        System.out.println("fin série");
 
-        Assert.assertEquals((Double)0.15, rep2);
+
+        myEchangeService.majreput(alpha) ;
+        rep=myUserService.findByQuery("Alice").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Bob").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Charles").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Daniel").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Jean").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Paul").get(0).getReputation();
+        System.out.println(rep);
+        System.out.println("fin série");
+
+
+        myEchangeService.majreput(alpha) ;
+        rep=myUserService.findByQuery("Alice").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Bob").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Charles").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Daniel").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Jean").get(0).getReputation();
+        System.out.println(rep);
+        rep=myUserService.findByQuery("Paul").get(0).getReputation();
+        System.out.println(rep);
+        System.out.println("fin série");
+
+       // Assert.assertEquals((Double)0.15, rep2);
 
     }
 }

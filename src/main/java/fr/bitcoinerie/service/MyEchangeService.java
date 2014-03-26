@@ -25,7 +25,7 @@ public interface MyEchangeService {
 
     List<MyEchange> findByRecepteurEchange(Long id);
 
-    void nouvuser( Date date_temps, MyUser nouveau, Double montant);
+    void nouvuser( MyUser nouveau, Double montant);
 
     MyEchange findOneEchange(Long emet, Long recept) ;
 
@@ -37,7 +37,7 @@ public interface MyEchangeService {
 
     void calculproba(Long emet, Long recept);
 
-    public void majproba(Long emetteur, Long recepteur);
-    public void majreput(Double alpha) ;
+     void majproba(Long emetteur, Long recepteur);
+    void majreput(Double alpha) ;
 
 }

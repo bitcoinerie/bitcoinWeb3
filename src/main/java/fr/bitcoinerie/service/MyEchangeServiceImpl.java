@@ -32,8 +32,8 @@ public class MyEchangeServiceImpl implements MyEchangeService {
         Session session = sessionFactory.getCurrentSession();
 
         session.save(myUser);
-        nouvuser(new Date(),myUser,myUser.getMontant_compte());
-       majreput(0.15);
+        nouvuser(myUser,myUser.getMontant_compte());
+
     }
     @Override
     @Transactional
@@ -147,50 +147,60 @@ public class MyEchangeServiceImpl implements MyEchangeService {
     public void majEchange (Double montant, Date date_temps, Long emet, Long recept) {
 
         MyEchange echange=findOneEchange(emet,recept );
-        echange.setDate_derniere_modification(date_temps);
-        echange.setMontant(echange.getMontant()+montant) ;
-        updateEchange(echange);
-        MyEchange echangeemet=findOneEchange(emet,emet );
-        echangeemet.setDate_derniere_modification(date_temps);
-        echangeemet.setMontant(echangeemet.getMontant()-montant) ;
-        updateEchange(echangeemet);
-        MyEchange echangerecep=findOneEchange(recept,recept );
-        echangerecep.setDate_derniere_modification(date_temps);
-        echangerecep.setMontant(echangerecep.getMontant()+montant) ;
-        updateEchange(echangerecep);
+        if ( echange!=null) {
+            echange.setDate_derniere_modification(date_temps);
+            echange.setMontant(echange.getMontant() + montant);
+            updateEchange(echange);
+            MyEchange echangeemet = findOneEchange(emet, emet);
+            echangeemet.setDate_derniere_modification(date_temps);
+            echangeemet.setMontant(echangeemet.getMontant() - montant);
+            updateEchange(echangeemet);
+            MyEchange echangerecep = findOneEchange(recept, recept);
+            echangerecep.setDate_derniere_modification(date_temps);
+            echangerecep.setMontant(echangerecep.getMontant() + montant);
+            updateEchange(echangerecep);
+        }
 
 
 
     }
     @Transactional
     @Override
-   public void nouvuser( Date date_temps, MyUser nouveau, Double montant){
+   public void nouvuser( MyUser nouveau, Double montant){
         List<MyUser> users= myUserService.findAll();
         int i;
         double size = users.size();
         nouveau.setReputation(1./size);
+        myUserService.updateUser(nouveau);
         MyEchange echange3 = new MyEchange( montant, nouveau,nouveau);
         updateEchange(echange3);
         Long idnouv= nouveau.getId_user();
         for (i=0; i< users.size();i++){
             Long id= users.get(i).getId_user();
-            MyEchange ech= findOneEchange(id,idnouv);
-            users.get(i).setReputation(users.get(i).getReputation()*(size-1)/size);
-            if(ech==null){
-             saveEchange(new MyEchange( 0., users.get(i),nouveau));
-            }
-            MyEchange echange2 = findOneEchange(idnouv,id);
-            if(echange2==null){
+            if (id!=idnouv) {
+                MyEchange ech = findOneEchange(id, idnouv);
+                users.get(i).setReputation(users.get(i).getReputation() * (size - 1) / size);
+                myUserService.updateUser(users.get(i));
+                if (ech == null) {
+                    saveEchange(new MyEchange(0., users.get(i), nouveau));
+                }
+                MyEchange echange2 = findOneEchange(idnouv, id);
+                if (echange2 == null) {
 
-                saveEchange(new MyEchange( 0., nouveau, users.get(i)));
+                    saveEchange(new MyEchange(0., nouveau, users.get(i)));
+                }
             }
-            for (i=0; i< users.size();i++){
-                Long id2= users.get(i).getId_user();
-                majproba(id2, idnouv);
-                majproba(idnouv, id2);
+        }
+        List<MyUser> users2= myUserService.findAll();
+                for (i = 0; i < users2.size(); i++) {
+                    if (users2.size() > 0) {
+                        Long id2 = users2.get(i).getId_user();
+                        majproba(id2, idnouv);
+                        majproba(idnouv, id2);
+                    }
 
-            }
-       }
+                }
+
     }
 
     @Transactional
@@ -265,17 +275,19 @@ public class MyEchangeServiceImpl implements MyEchangeService {
         int i;
         Double s=0.;
         MyEchange ech= findOneEchange(emet,recept);
-     List<MyEchange> echanges =  findByEmetteurEchange( emet);
-        for (i=0; i< echanges.size();i++){
-            s=s+((echanges.get(i)).getMontant());
-         }
-        System.out.println(ech.getMontant());
-        System.out.println(s);
-        Double proba =ech.getMontant()/s;
-        System.out.println(proba);
-        ech.setProbabilite(proba);
-        Session session = sessionFactory.getCurrentSession();
-        updateEchange(ech);
+        if (ech != null) {
+            List<MyEchange> echanges = findByEmetteurEchange(emet);
+            for (i = 0; i < echanges.size(); i++) {
+                s = s + ((echanges.get(i)).getMontant());
+            }
+            if ((s > 0) & (echanges.size() > 0)) {
+                Double proba = ech.getMontant() / s;
+                ech.setProbabilite(proba);
+            }
+
+            Session session = sessionFactory.getCurrentSession();
+            updateEchange(ech);
+        }
     }
 
 
